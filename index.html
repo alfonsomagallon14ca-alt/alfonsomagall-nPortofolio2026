@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alfonso Magallón | Portfolio 2026</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ==========================================================================
+           VARIABLES & CSS RESET
+           ========================================================================== */
+        :root {
+            --bg-paper: #FDFBF7;
+            --text-main: #1A1918;
+            --text-muted: #66635F;
+            --accent-color: #2D2B2A;
+            --border-color: #E2DDD5;
+            --card-bg: #FFFFFF;
+            
+            --font-serif: 'Cormorant Garamond', Georgia, serif;
+            --font-sans: 'Plus Jakarta Sans', -apple-system, sans-serif;
+            
+            --ease-out-smooth: cubic-bezier(0.25, 1, 0.5, 1);
+            --ease-elastic: cubic-bezier(0.34, 1.56, 0.64, 1);
+            --shadow-subtle: 0 10px 30px rgba(0,0,0,0.04);
+            --shadow-hover: 0 20px 40px rgba(0,0,0,0.08);
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            background-color: var(--bg-paper);
+            color: var(--text-main);
+            font-family: var(--font-sans);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        img, video {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        button {
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-family: inherit;
+        }
+
+        /* ==========================================================================
+           LAYOUT & REUSABLE COMPONENTS
+           ========================================================================== */
+        .container {
+            width: 90%;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .section-padding {
+            padding: 6rem 0;
+        }
+
+        .editorial-tag {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--text-muted);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .editorial-title {
+            font-family: var(--font-serif);
+            font-size: clamp(2.2rem, 5vw, 3.5rem);
+            font-weight: 600;
+            line-height: 1.15;
+            margin-bottom: 1.5rem;
+        }
+
+        .aspect-16-9 { aspect-ratio: 16 / 9; object-fit: cover; }
+        .aspect-8-10 { aspect-ratio: 8 / 10; object-fit: cover; }
+        .aspect-square { aspect-ratio: 1 / 1; object-fit: cover; }
+
+        /* Smooth Reveal Animation Class */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s var(--ease-out-smooth), transform 0.8s var(--ease-out-smooth);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Interactive Image Zoom Wrapper */
+        .img-hover-zoom {
+            overflow: hidden;
+            border-radius: 4px;
+            background-color: #f0ece1;
+            position: relative;
+        }
+
+        .img-hover-zoom img, .img-hover-zoom video {
+            transition: transform 0.6s var(--ease-out-smooth), filter 0.6s ease;
+            width: 100%;
+            height: 100%;
+        }
+
+        .img-hover-zoom:hover img, .img-hover-zoom:hover video {
+            transform: scale(1.03);
+        }
+
+        /* Custom Dynamic Carousel */
+        .carousel-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 6px;
+            margin-top: 1rem;
+            box-shadow: var(--shadow-subtle);
+        }
+
+        .carousel-track {
+            display: flex;
+            transition: transform 0.5s var(--ease-out-smooth);
+        }
+
+        .carousel-slide {
+            min-width: 100%;
+            position: relative;
+        }
+
+        .carousel-nav {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            transform: translateY(-50%);
+            padding: 0 1rem;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .carousel-btn {
+            pointer-events: auto;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(253, 251, 247, 0.85);
+            backdrop-filter: blur(4px);
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: justify;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: transform 0.2s var(--ease-elastic), background 0.3s ease;
+        }
+
+        .carousel-btn:hover {
+            transform: scale(1.1);
+            background: #FFFFFF;
+        }
+
+        .carousel-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* ==========================================================================
+           HEADER & NAVIGATION
+           ========================================================================== */
+        .site-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(253, 251, 247, 0.88);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(226, 221, 213, 0.5);
+            transition: transform 0.3s ease, background 0.3s ease;
+        }
+
+        .header-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 80px;
+        }
+
+        .brand-logo {
+            font-family: var(--font-serif);
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .brand-logo span {
+            font-family: var(--font-sans);
+            font-size: 0.75rem;
+            font-weight: 400;
+            color: var(--text-muted);
+            border-left: 1px solid var(--border-color);
+            padding-left: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-link {
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            position: relative;
+            padding: 0.25rem 0;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0%;
+            height: 1px;
+            background-color: var(--text-main);
+            transition: width 0.3s var(--ease-out-smooth);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .btn-contact-nav {
+            padding: 0.6rem 1.25rem;
+            border: 1px solid var(--text-main);
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: all 0.3s var(--ease-out-smooth);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-contact-nav:hover {
+            background-color: var(--text-main);
+            color: var(--bg-paper);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .btn-contact-nav:active {
+            transform: translateY(0) scale(0.97);
+        }
+
+        .btn-contact-nav svg {
+            transition: transform 0.3s var(--ease-out-smooth);
+        }
+
+        .btn-contact-nav:hover svg {
+            transform: translateX(3px);
+        }
+
+        /* Mobile Menu Toggle button */
+        .mobile-toggle {
+            display: none;
+            width: 30px;
+            height: 20px;
+            position: relative;
+            flex-direction: column;
+            justify-content: space-between;
+            z-index: 1001;
+        }
+
+        .mobile-toggle span {
+            width: 100%;
+            height: 2px;
+            background-color: var(--text-main);
+            transition: all 0.3s var(--ease-out-smooth);
+            transform-origin: left;
+        }
+
+        .mobile-toggle.active span:nth-child(1) {
+            transform: rotate(45deg);
+        }
+
+        .mobile-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg);
+        }
+
+        /* ==========================================================================
+           HERO & WHO AM I
+           ========================================================================== */
+        .hero-section {
+            padding-top: 160px;
+            padding-bottom: 5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-title-main {
+            font-family: var(--font-serif);
+            font-size: clamp(3rem, 7vw, 5.5rem);
+            line-height: 0.95;
+            font-weight: 400;
+            letter-spacing: -0.02em;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            font-weight: 400;
+            border-left: 2px solid var(--text-main);
+            padding-left: 1rem;
+        }
+
+        .bio-text {
+            font-size: 1.05rem;
+            color: var(--text-main);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-graphic-card {
+            background-color: #F4F0E8;
+            border: 1px solid var(--border-color);
+            padding: 2.5rem;
+            border-radius: 8px;
+            text-align: center;
+            position: relative;
+            transition: transform 0.4s var(--ease-out-smooth);
+        }
+
+        .hero-graphic-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .hero-graphic-card svg {
+            width: 64px;
+            height: 64px;
+            margin-bottom: 1rem;
+            stroke: var(--text-main);
+        }
+
+        /* ==========================================================================
+           SKILLS SECTION
+           ========================================================================== */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .skill-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 1.25rem 1rem;
+            text-align: center;
+            transition: all 0.3s var(--ease-out-smooth);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: var(--shadow-subtle);
+        }
+
+        .skill-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-hover);
+            border-color: #C5C0B8;
+        }
+
+        .skill-icon {
+            width: 48px;
+            height: 48px;
+            object-fit: contain;
+            margin-bottom: 0.75rem;
+            filter: grayscale(20%);
+            transition: filter 0.3s ease, transform 0.3s var(--ease-elastic);
+        }
+
+        .skill-card:hover .skill-icon {
+            filter: grayscale(0%);
+            transform: scale(1.1);
+        }
+
+        .skill-name {
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+        }
+
+        .rating-stars {
+            color: #D4A373;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+        }
+
+        /* ==========================================================================
+           PROJECTS LAYOUT & CUSTOM THEMING
+           ========================================================================== */
+        .project-block {
+            margin-bottom: 8rem;
+            padding-top: 2rem;
+        }
+
+        .project-header {
+            margin-bottom: 2.5rem;
+        }
+
+        .project-type-badge {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            background: rgba(0,0,0,0.05);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            margin-bottom: 0.75rem;
+        }
+
+        .project-desc-text {
+            max-width: 800px;
+            font-size: 1.05rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+            margin-top: 1rem;
+        }
+
+        .explanatory-text {
+            background: rgba(0,0,0,0.02);
+            border-left: 3px solid var(--text-main);
+            padding: 1rem 1.25rem;
+            font-size: 0.95rem;
+            font-style: italic;
+            margin: 1.5rem 0;
+            border-radius: 0 4px 4px 0;
+        }
+
+        /* GRID LAYOUT VARIATIONS FOR PROJECTS */
+        .grid-2col {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .grid-3col {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .grid-4col {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+        }
+
+        /* Special Styling for "Vivimos en la misma selva" */
+        .theme-selva {
+            background-color: #bcd700;
+            color: #111111;
+            padding: 4rem 2rem;
+            border-radius: 12px;
+            margin-top: 2rem;
+        }
+
+        .theme-selva .editorial-tag,
+        .theme-selva .project-desc-text,
+        .theme-selva .editorial-title {
+            color: #111111;
+        }
+
+        .theme-selva .project-type-badge {
+            background: rgba(255, 255, 255, 0.4);
+            color: #111111;
+        }
+
+        .theme-selva .explanatory-text {
+            background: rgba(255,255,255,0.3);
+            border-left-color: #111111;
+            color: #111111;
+        }
+
+        /* Card Overlay Caption on Hover */
+        .media-card {
+            position: relative;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .media-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(transparent, rgba(0,0,0,0.75));
+            color: #FFFFFF;
+            font-size: 0.8rem;
+            font-weight: 500;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s var(--ease-out-smooth);
+            pointer-events: none;
+        }
+
+        .media-card:hover .media-caption {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ==========================================================================
+           CONTACT SECTION
+           ========================================================================== */
+        .contact-section {
+            background-color: var(--accent-color);
+            color: var(--bg-paper);
+            border-radius: 12px;
+            padding: 5rem 3rem;
+            margin-bottom: 4rem;
+            text-align: center;
+        }
+
+        .contact-title {
+            font-family: var(--font-serif);
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            margin-bottom: 1rem;
+        }
+
+        .contact-subtitle {
+            font-size: 1.1rem;
+            color: #C5C0B8;
+            margin-bottom: 3rem;
+        }
+
+        .contact-links-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1.5rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .contact-pill {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 1rem 1.75rem;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.3s var(--ease-out-smooth);
+        }
+
+        .contact-pill:hover {
+            background: var(--bg-paper);
+            color: var(--text-main);
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .contact-pill:active {
+            transform: translateY(-1px) scale(0.98);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem 0 4rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* ==========================================================================
+           RESPONSIVE MEDIA QUERIES (MOBILE-FIRST BREAKPOINTS)
+           ========================================================================== */
+        @media (max-width: 992px) {
+            .hero-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .grid-4col {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .mobile-toggle {
+                display: flex;
+            }
+
+            .nav-menu {
+                position: fixed;
+                top: 80px;
+                left: 0;
+                width: 100%;
+                height: calc(100vh - 80px);
+                background: var(--bg-paper);
+                flex-direction: column;
+                padding: 3rem 2rem;
+                align-items: flex-start;
+                gap: 2rem;
+                transform: translateX(100%);
+                transition: transform 0.4s var(--ease-out-smooth);
+            }
+
+            .nav-menu.active {
+                transform: translateX(0);
+            }
+
+            .nav-links {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1.5rem;
+                width: 100%;
+            }
+
+            .nav-link {
+                font-size: 1.2rem;
+            }
+
+            .grid-2col, .grid-3col {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-section {
+                padding: 3rem 1.5rem;
+            }
+
+            .contact-pill {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="site-header">
+        <div class="container header-inner">
+            <a href="#" class="brand-logo">
+                Alfonso Magallón <span>Portfolio 2026</span>
+            </a>
+
+            <div class="mobile-toggle" id="mobileToggle" aria-label="Abrir Menú">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+
+            <nav class="nav-menu" id="navMenu">
+                <ul class="nav-links">
+                    <li><a href="#identidad" class="nav-link">Identidad Gráfica</a></li>
+                    <li><a href="#ilustracion" class="nav-link">Ilustración Comercial</a></li>
+                    <li><a href="#animacion" class="nav-link">Animación</a></li>
+                    <li><a href="#packaging" class="nav-link">Packaging</a></li>
+                </ul>
+                <a href="#contacto" class="btn-contact-nav">
+                    Contacto
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="hero-section reveal">
+            <div class="hero-grid">
+                <div>
+                    <span class="editorial-tag">Diseño Gráfico / Ilustración</span>
+                    <h1 class="hero-title-main">Alfonso Magallón</h1>
+                    <p class="hero-subtitle">Estudiante de 4.º y último año en la Universidad de Panamá</p>
+                    <p class="bio-text">
+                        Soy un diseñador e ilustrador panameño. A lo largo de mi carrera, he desarrollado una sólida trayectoria tanto en el ámbito universitario como en el sector profesional e independiente, enfocándome en dar respuestas estéticas sobrias y con identidad cultural.
+                    </p>
+                </div>
+                <div>
+                    <div class="hero-graphic-card">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                            <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+                        </svg>
+                        <h3 style="font-family: var(--font-serif); font-size: 1.4rem; margin-bottom: 0.5rem;">Perfil Académico</h3>
+                        <p style="font-size: 0.85rem; color: var(--text-muted);">Estudiante de la carrera de Diseño Gráfico en la Universidad de Panamá.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section-padding reveal">
+            <span class="editorial-tag">Dominio Técnico</span>
+            <h2 class="editorial-title">Habilidades & Herramientas</h2>
+
+            <div class="skills-grid">
+                <div class="skill-card">
+                    <img src="images/1.png" alt="Photoshop" class="skill-icon">
+                    <span class="skill-name">Photoshop</span>
+                    <div class="rating-stars">★★★★★</div>
+                </div>
+                <div class="skill-card">
+                    <img src="images/2.png" alt="Illustrator" class="skill-icon">
+                    <span class="skill-name">Illustrator</span>
+                    <div class="rating-stars">★★★★☆</div>
+                </div>
+                <div class="skill-card">
+                    <img src="images/3.png" alt="After Effects" class="skill-icon">
+                    <span class="skill-name">After Effects</span>
+                    <div class="rating-stars">★★★☆☆</div>
+                </div>
+                <div class="skill-card">
+                    <img src="images/4.png" alt="DaVinci Resolve" class="skill-icon">
+                    <span class="skill-name">DaVinci Resolve</span>
+                    <div class="rating-stars">★★★☆☆</div>
+                </div>
+                <div class="skill-card">
+                    <img src="images/5.png" alt="Figma" class="skill-icon">
+                    <span class="skill-name">Figma</span>
+                    <div class="rating-stars">★★★☆☆</div>
+                </div>
+                <div class="skill-card">
+                    <img src="images/6.png" alt="GitHub" class="skill-icon">
+                    <span class="skill-name">GitHub</span>
+                    <div class="rating-stars">★★★★☆</div>
+                </div>
+                <div class="skill-card">
+                    <img src="images/7.png" alt="Inglés" class="skill-icon">
+                    <span class="skill-name">Inglés (A2)</span>
+                    <div class="rating-stars">★★☆☆☆</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="identidad" class="section-padding">
+            <span class="editorial-tag">01 / Portafolio</span>
+            <h2 class="editorial-title">Identidad Gráfica</h2>
+            <p class="project-desc-text" style="margin-bottom: 3rem;">
+                Recopilación de proyectos de identidad gráfica y branding desarrollados con enfoque estratégico e investigación visual.
+            </p>
+
+            <article class="project-block theme-selva reveal">
+                <span class="project-type-badge">Proyecto Universitario</span>
+                <h3 class="editorial-title">Vivimos en la misma selva</h3>
+                <p class="project-desc-text">
+                    Identidad gráfica para una campaña de diseño gráfico cultural enfocada en el resguardo y cuidado de la fauna salvaje en Panamá.
+                </p>
+
+                <div class="carousel-container" id="carousel-selva">
+                    <div class="carousel-track">
+                        <div class="carousel-slide">
+                            <img src="images/8.png" alt="Logotipo Campaña" class="aspect-16-9">
+                        </div>
+                        <div class="carousel-slide">
+                            <img src="images/10.jpg" alt="Dirección de diseño - Realización" class="aspect-16-9">
+                        </div>
+                        <div class="carousel-slide">
+                            <img src="images/9.jpg" alt="Dirección de diseño - Concepto" class="aspect-16-9">
+                        </div>
+                    </div>
+                    <div class="carousel-nav">
+                        <button class="carousel-btn prev">&#10094;</button>
+                        <button class="carousel-btn next">&#10095;</button>
+                    </div>
+                </div>
+
+                <p class="explanatory-text">
+                    Para el diseño del logotipo se realizó un concepto basado en la unión de huellas y patas de felinos, reptiles, aves y humanos, representando la armonía y coexistencia entre todos los seres vivos en Panamá.
+                </p>
+
+                <div class="grid-3col" style="margin-top: 1.5rem;">
+                    <div class="img-hover-zoom media-card">
+                        <img src="images/11.jpg" alt="Colores del logotipo" class="aspect-16-9">
+                        <div class="media-caption">Colores del logotipo</div>
+                    </div>
+                    <div class="img-hover-zoom media-card">
+                        <img src="images/12.jpg" alt="Texturas" class="aspect-16-9">
+                        <div class="media-caption">Texturas conceptuales</div>
+                    </div>
+                    <div class="img-hover-zoom media-card">
+                        <img src="images/13.jpg" alt="Paleta de colores" class="aspect-16-9">
+                        <div class="media-caption">Paleta de colores oficial</div>
+                    </div>
+                </div>
+
+                <p class="explanatory-text">
+                    Se escogieron colores que representan la fauna marina, la selva y tonos cálidos (amarillo y naranja) para aportar un enfoque humanista y cercano.
+                </p>
+
+                <h4 style="margin: 2rem 0 1rem; font-family: var(--font-serif); font-size: 1.5rem;">Aplicaciones Gráficas & Didácticas</h4>
+                <div class="grid-3col">
+                    <div class="img-hover-zoom media-card"><img src="images/14.jpg" alt="Valla publicitaria" class="aspect-16-9"><div class="media-caption">Valla Publicitaria</div></div>
+                    <div class="img-hover-zoom media-card"><img src="images/15.jpg" alt="MUPI 1" class="aspect-16-9"><div class="media-caption">MUPI Urbano 1</div></div>
+                    <div class="img-hover-zoom media-card"><img src="images/16.jpg" alt="MUPI 2" class="aspect-16-9"><div class="media-caption">MUPI Urbano 2</div></div>
+                    <div class="img-hover-zoom media-card"><img src="images/17.jpg" alt="Material didáctico General" class="aspect-16-9"><div class="media-caption">Material Didáctico General</div></div>
+                    <div class="img-hover-zoom media-card"><img src="images/18.jpg" alt="Material didáctico Escolar" class="aspect-16-9"><div class="media-caption">Versión Escolar</div></div>
+                    <div class="img-hover-zoom media-card"><img src="images/19.jpg" alt="Post de Instagram" class="aspect-16-9"><div class="media-caption">Social Media - Post</div></div>
+                </div>
+
+                <h4 style="margin: 2rem 0 1rem; font-family: var(--font-serif); font-size: 1.5rem;">Material Infantil "Aprendiendo y Riendo"</h4>
+                <div class="grid-4col">
+                    <div class="img-hover-zoom"><img src="images/21.jpg" alt="Juegos 1"></div>
+                    <div class="img-hover-zoom"><img src="images/22.jpg" alt="Juegos 2"></div>
+                    <div class="img-hover-zoom"><img src="images/23.jpg" alt="Juegos 3"></div>
+                    <div class="img-hover-zoom"><img src="images/24.jpg" alt="Mural para escuela"></div>
+                </div>
+            </article>
+
+            <article class="project-block reveal">
+                <span class="project-type-badge">Proyecto Universitario</span>
+                <h3 class="editorial-title">Alas del Istmo</h3>
+                <p class="project-desc-text">
+                    Identidad gráfica desarrollada para un festival de avistamiento de aves celebrado anualmente en septiembre en el Parque Omar. El objetivo es la concienciación sobre la avifauna panameña.
+                </p>
+
+                <div class="grid-2col" style="margin-top: 2rem;">
+                    <div class="img-hover-zoom"><img src="images/25.png" alt="Logotipo Alas del Istmo"></div>
+                    <div class="img-hover-zoom"><img src="images/26.png" alt="Realización"></div>
+                </div>
+
+                <div class="grid-3col" style="margin-top: 1.5rem;">
+                    <div class="img-hover-zoom media-card"><img src="images/27.jpg" alt="Concepto 3 ejes" class="aspect-16-9"><div class="media-caption">Concepto: Binoculares, Aves y Movimiento</div></div>
+                    <div class="img-hover-zoom media-card"><img src="images/28.jpg" alt="Colores" class="aspect-16-9"><div class="media-caption">Muestra cromática</div></div>
+                    <div class="img-hover-zoom media-card"><img src="images/30.jpg" alt="Paleta" class="aspect-16-9"><div class="media-caption">Paleta extraída de la avifauna</div></div>
+                </div>
+
+                <div class="grid-3col" style="margin-top: 1.5rem;">
+                    <div class="img-hover-zoom media-card"><img src="images/31.jpg" alt="Valla" class="aspect-16-9"><div class="media-caption">Valla Publicitaria</div></div>
+                    <div class="img-hover-zoom media-card"><img src="images/32.jpg" alt="MUPI 1" class="aspect-16-9"><div class="media-caption">MUPI</div></div>
+                    <div class="img-hover-zoom media-card"><img src="images/35.jpg" alt="Vinil autobús" class="aspect-16-9"><div class="media-caption">Vinil para Autobús</div></div>
+                </div>
+
+                <div class="grid-2col" style="margin-top: 1.5rem;">
+                    <div class="img-hover-zoom media-card"><img src="images/36.jpg" alt="Mascota Cotorro"><div class="media-caption">Mascota Oficial "Cotorro"</div></div>
+                    <div class="img-hover-zoom media-card"><img src="images/37.jpg" alt="Variaciones"><div class="media-caption">Variaciones de la Mascota</div></div>
+                </div>
+            </article>
+
+            <article class="project-block reveal">
+                <span class="project-type-badge">Identidad de Evento (2025–2026)</span>
+                <h3 class="editorial-title">BeeFest</h3>
+                <p class="project-desc-text">
+                    Festival anual en El Valle de Antón centrado en las abejas meliponas y su rol ecológico. Marca gráfica orgánica y cercana inspirada en la naturaleza local.
+                </p>
+
+                <div style="max-width: 400px; margin: 2rem 0;" class="img-hover-zoom">
+                    <img src="images/42.png" alt="BeeFest Logo">
+                </div>
+
+                <div class="grid-2col">
+                    <div class="img-hover-zoom">
+                        <img src="images/43.jpg" alt="Paleta de colores BeeFest" style="width: 115px; height: 474px; object-fit: cover; margin: 0 auto;">
+                    </div>
+                    <div>
+                        <div class="img-hover-zoom media-card" style="margin-bottom: 1rem;">
+                            <img src="images/44.jpg" alt="Aplicaciones RRSS" style="width: 1114px; height: 825px; object-fit: cover;">
+                            <div class="media-caption">Redes Sociales</div>
+                        </div>
+                        <div class="img-hover-zoom media-card">
+                            <img src="images/45.jpg" alt="Piezas impresas" class="aspect-8-10">
+                            <div class="media-caption">Impresos</div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </section>
+
+        <section id="ilustracion" class="section-padding">
+            <span class="editorial-tag">02 / Portafolio</span>
+            <h2 class="editorial-title">Ilustración Comercial</h2>
+
+            <article class="project-block reveal">
+                <span class="project-type-badge">Concurso Taza Locura 2026</span>
+                <h3 class="editorial-title">Café Durán</h3>
+                <p class="project-desc-text">
+                    Propuesta que busca exaltar la labor del caficultor panameño, narrando el recorrido del café desde las cosechas en el campo hasta su llegada a la ciudad.
+                </p>
+
+                <div class="img-hover-zoom aspect-16-9" style="margin: 2rem 0;">
+                    <video autoplay loop muted playsinline>
+                        <source src="images/46.mp4" type="video/mp4">
+                    </video>
+                </div>
+
+                <div class="img-hover-zoom media-card" style="margin-bottom: 1.5rem;">
+                    <img src="images/47.jpg" alt="Arte desplegado Caficultor" style="width: 6600px; height: 2550px; object-fit: cover;">
+                    <div class="media-caption">Arte Desplegado Completo</div>
+                </div>
+
+                <div class="grid-3col">
+                    <div class="img-hover-zoom"><img src="images/48.jpg" alt="Detalle 1" class="aspect-square"></div>
+                    <div class="img-hover-zoom"><img src="images/49.jpg" alt="Detalle 2" class="aspect-square"></div>
+                    <div class="img-hover-zoom"><img src="images/50.jpg" alt="Detalle 3" class="aspect-square"></div>
+                </div>
+
+                <div class="grid-2col" style="margin-top: 1.5rem;">
+                    <div class="img-hover-zoom"><img src="images/51.jpg" alt="Mockup 1" style="width: 2700px; height: 4800px; object-fit: cover;"></div>
+                    <div class="img-hover-zoom"><img src="images/52.jpg" alt="Mockup 2" style="width: 2406px; height: 2400px; object-fit: cover;"></div>
+                </div>
+            </article>
+
+            <article class="project-block reveal">
+                <span class="project-type-badge">KFC Bucket Challenge 2025</span>
+                <h3 class="editorial-title">KFC Bucket Panameño</h3>
+                <p class="project-desc-text">
+                    Propuesta visual que resalta la identidad panameña mediante una ilustración que integra elementos representativos de nuestra cultura, fauna y flora local.
+                </p>
+
+                <div class="grid-2col" style="margin-top: 2rem;">
+                    <div class="img-hover-zoom">
+                        <img src="images/53.jpg" alt="Mockup Producto KFC" style="width: 2400px; height: 3000px; object-fit: cover;">
+                    </div>
+                    <div class="img-hover-zoom">
+                        <img src="images/54.jpg" alt="Arte Final KFC" style="width: 9302px; height: 2954px; object-fit: cover;">
+                    </div>
+                </div>
+
+                <div class="grid-2col" style="margin-top: 1.5rem;">
+                    <div class="img-hover-zoom"><img src="images/55.jpg" alt="Detalle Cuadrado" class="aspect-square"></div>
+                    <div class="img-hover-zoom"><img src="images/56.jpg" alt="Detalle Vertical"></div>
+                </div>
+            </article>
+
+            <article class="project-block reveal">
+                <span class="project-type-badge">Ilustración Científica / Pop</span>
+                <h3 class="editorial-title">BeeFest: Stickers de Polinizadores</h3>
+                <p class="project-desc-text">
+                    Diseños de stickers orientados a resaltar la belleza y el valor ecológico de las especies polinizadoras nativas de Panamá.
+                </p>
+
+                <div class="grid-3col" style="margin-top: 2rem;">
+                    <div class="img-hover-zoom media-card">
+                        <img src="images/57.jpg" alt="Eulaema cingulata" class="aspect-square">
+                        <div class="media-caption">Abeja (Eulaema cingulata)</div>
+                    </div>
+                    <div class="img-hover-zoom media-card">
+                        <img src="images/58.jpg" alt="Polistes dominula" class="aspect-square">
+                        <div class="media-caption">Avispa (Polistes dominula)</div>
+                    </div>
+                    <div class="img-hover-zoom media-card">
+                        <img src="images/59.jpg" alt="Siproeta stelenes" class="aspect-square">
+                        <div class="media-caption">Mariposa (Siproeta stelenes)</div>
+                    </div>
+                </div>
+            </article>
+        </section>
+
+        <section id="animacion" class="section-padding">
+            <span class="editorial-tag">03 / Portafolio</span>
+            <h2 class="editorial-title">Animación & Motion</h2>
+
+            <article class="project-block reveal">
+                <span class="project-type-badge">After Effects</span>
+                <h3 class="editorial-title">Tierra Fértil</h3>
+                <p class="project-desc-text">
+                    Ilustración y animación personal desarrollada en el marco de las Fiestas Patrias.
+                </p>
+                <div class="img-hover-zoom aspect-16-9" style="margin-top: 1.5rem;">
+                    <video autoplay loop muted playsinline>
+                        <source src="images/60.mp4" type="video/mp4">
+                    </video>
+                </div>
+            </article>
+
+            <article class="project-block reveal">
+                <span class="project-type-badge">Ganador Four Loko Print 2025</span>
+                <h3 class="editorial-title">Animación Four Loko</h3>
+                <p class="project-desc-text">
+                    Pieza que combina la energía vibrante de Four Loko con la esencia panameña.
+                </p>
+                <div class="grid-2col" style="margin-top: 1.5rem;">
+                    <div class="img-hover-zoom"><img src="images/61.jpg" alt="Ilustración Original Four Loko" style="aspect-ratio: 10/8; object-fit: cover;"></div>
+                    <div class="img-hover-zoom">
+                        <video autoplay loop muted playsinline style="height: 100%; object-fit: cover;">
+                            <source src="images/62.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                </div>
+            </article>
+
+            <article class="project-block reveal">
+                <span class="project-type-badge">Fan Art / Motion Graphics</span>
+                <h3 class="editorial-title">Blasphemous Animated Poster</h3>
+                <p class="project-desc-text">
+                    Póster y animación estilo fan art inspirados en el reconocido videojuego indie Blasphemous.
+                </p>
+                <div class="grid-2col" style="margin-top: 1.5rem;">
+                    <div class="img-hover-zoom"><img src="images/63.jpg" alt="Ilustración Blasphemous" style="width: 3900px; height: 5700px; object-fit: cover;"></div>
+                    <div class="img-hover-zoom">
+                        <video autoplay loop muted playsinline style="height: 100%; object-fit: cover;">
+                            <source src="images/64.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                </div>
+            </article>
+        </section>
+
+        <section id="packaging" class="section-padding">
+            <span class="editorial-tag">04 / Portafolio</span>
+            <h2 class="editorial-title">Diseño de Empaque</h2>
+
+            <article class="project-block reveal">
+                <span class="project-type-badge">Cervecería Clandestina</span>
+                <h3 class="editorial-title">Pa' la Piña</h3>
+                <p class="project-desc-text">
+                    Diseño de empaque para cerveza artesanal. Mezcla la actitud irreverente de Cervecería Clandestina con el perfil frutal de la piña.
+                </p>
+                <div class="grid-2col" style="margin-top: 2rem;">
+                    <div class="img-hover-zoom"><img src="images/65.jpg" alt="Mockup Principal Pa la piña" style="width: 5380px; height: 5000px; object-fit: cover;"></div>
+                    <div class="img-hover-zoom"><img src="images/66.jpg" alt="Mockup Secundario" class="aspect-square"></div>
+                </div>
+                <div class="img-hover-zoom media-card" style="margin-top: 1.5rem;">
+                    <img src="images/67.jpg" alt="Arte Final Plano" style="width: 1803px; height: 786px; object-fit: cover;">
+                    <div class="media-caption">Etiqueta Plana</div>
+                </div>
+            </article>
+
+            <article class="project-block reveal">
+                <span class="project-type-badge">Cervecería Nacional (Campaña Ficticia)</span>
+                <h3 class="editorial-title">Balboa Roja — Edición Mundial 2026</h3>
+                <p class="project-desc-text">
+                    Rediseño de lata edición especial conmemorativa ante la participación de Panamá en el Mundial 2026.
+                </p>
+                <div class="grid-3col" style="margin-top: 2rem;">
+                    <div class="img-hover-zoom"><img src="images/68.jpg" alt="Mockup lata Balboa Roja" class="aspect-8-10"></div>
+                    <div class="img-hover-zoom"><img src="images/69.jpg" alt="Arte plano Balboa" style="width: 1400px; height: 849px; object-fit: cover;"></div>
+                    <div class="img-hover-zoom"><img src="images/70.jpg" alt="Póster publicitario" class="aspect-8-10"></div>
+                </div>
+                <div class="grid-2col" style="margin-top: 1.5rem;">
+                    <div class="img-hover-zoom"><img src="images/71.jpg" alt="Key Visual Elemento" class="aspect-8-10"></div>
+                    <div class="img-hover-zoom"><img src="images/72.jpg" alt="Mockup secundario lata" class="aspect-8-10"></div>
+                </div>
+            </article>
+        </section>
+
+        <section id="contacto" class="contact-section reveal">
+            <h2 class="contact-title">¡Trabajemos juntos!</h2>
+            <p class="contact-subtitle">Dale vida a tu proyecto. Hablemos, planeemos y concretemos.</p>
+
+            <div class="contact-links-grid">
+                <a href="https://instagram.com/meraacho" target="_blank" rel="noopener" class="contact-pill">
+                    <span>Instagram:</span> @meraacho
+                </a>
+                <a href="mailto:meeraachoo@gmail.com" class="contact-pill">
+                    <span>Correo:</span> meeraachoo@gmail.com
+                </a>
+                <a href="tel:+50761178561" class="contact-pill">
+                    <span>Teléfono:</span> +507 6117-8561
+                </a>
+                <a href="https://www.behance.net/alfonsomagalln135" target="_blank" rel="noopener" class="contact-pill">
+                    <span>Behance:</span> Alfonso Magallón
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Alfonso Magallón. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        // 1. Mobile Menu Toggle
+        const mobileToggle = id('mobileToggle');
+        const navMenu = id('navMenu');
+
+        function id(e) { return document.getElementById(e); }
+
+        mobileToggle.addEventListener('click', () => {
+            mobileToggle.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+
+        // Close mobile nav when clicking a link
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileToggle.classList.remove('active');
+                navMenu.classList.remove('active');
+            });
+        });
+
+        // 2. Scroll Reveal Animations (Intersection Observer)
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+        // 3. Dynamic Custom Slider (Selva Project)
+        const carousel = id('carousel-selva');
+        if (carousel) {
+            const track = carousel.querySelector('.carousel-track');
+            const slides = carousel.querySelectorAll('.carousel-slide');
+            const nextBtn = carousel.querySelector('.next');
+            const prevBtn = carousel.querySelector('.prev');
+            let currentIndex = 0;
+
+            function updateCarousel() {
+                track.style.transform = `translateX(-${currentIndex * 100}%)`;
+            }
+
+            nextBtn.addEventListener('click', () => {
+                currentIndex = (currentIndex + 1) % slides.length;
+                updateCarousel();
+            });
+
+            prevBtn.addEventListener('click', () => {
+                currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+                updateCarousel();
+            });
+        }
+    </script>
+</body>
+</html>
